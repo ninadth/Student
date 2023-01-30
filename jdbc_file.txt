@@ -1,0 +1,202 @@
+package com.Bikkad.Service;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+import com.Bikkad.Model.EmployeeModel;
+
+public class EmployeeServiceImpl implements EmployeeServiceI {
+
+	Scanner sc=new Scanner(System.in);
+	EmployeeModel empm=new EmployeeModel();
+	@Override
+	public void createtable() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", "root", "root");
+		String sql="Create table employee (empid int, name varchar(30), dept varchar(50), address varchar(100),salery int,email varchar(50))";
+		Statement statement = con.createStatement();
+		statement.execute(sql);
+		System.out.println("Table create Successfully");
+		statement.close();
+		con.close();
+		
+	}
+
+	@Override
+	public void InsertData() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		while(true) {
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", "root", "root");
+		
+		System.out.println("Insert your id: ");
+		int id=sc.nextInt();
+		empm.setEmpid(id);
+		System.out.println("Your id: " +empm.getEmpid());
+		
+		System.out.println("Insert your name: ");
+		String name=sc.next();
+		empm.setName(name);
+		System.out.println("Your name: " +empm.getName());
+		
+		System.out.println("Insert your dept: ");
+		String dept=sc.next();
+		empm.setDept(dept);
+		System.out.println("Your dept: " +empm.getDept());
+		
+		System.out.println("Insert your address: ");
+		String address=sc.next();
+		empm.setAddress(address);
+		System.out.println("Your address: " +empm.getAddress());
+		
+		System.out.println("Insert your salery: ");
+		int salery=sc.nextInt();
+		empm.setSalery(salery);
+		System.out.println("Your salery: " +empm.getSalery());
+		
+		System.out.println("Insert your email: ");
+		String email=sc.next();
+		empm.setEmail(email);
+		
+		
+		String sql= "insert into employee values (?,?,?,?,?,?)";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, id);
+		ps.setString(2, name);
+		ps.setString(3, dept);
+		ps.setString(4, address);
+		ps.setInt(5, salery);
+		ps.setString(6, email);
+		
+		ps.execute();
+		ps.close();
+		con.close();
+		
+		}
+		
+	}
+
+	@Override
+	public void ShowData() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		while(true) {
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", "root", "root");
+		
+		     Scanner sc=new Scanner(System.in);
+		     System.out.println("Insert your id=");
+		     int id=sc.nextInt();
+		     String sql="select * from employee where empid=?";
+		     PreparedStatement ps = con.prepareStatement(sql);
+		     ps.setInt(1, id);
+		     ResultSet rs = ps.executeQuery();
+		     while(rs.next()) {
+		    	 System.out.println(rs.getInt("empid")+" "+rs.getString("name")+" "+rs.getString("dept")+" "+rs.getString("address")+" "+rs.getInt("salery")+" "+rs.getString("email"));
+		     }
+		}
+		
+	}
+
+	@Override
+	public void UpdateData() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		while(true) {
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", "root", "root");
+		
+		System.out.println("Insert your id: ");
+		int id=sc.nextInt();
+		empm.setEmpid(id);
+		System.out.println("Your id: " +empm.getEmpid());
+		
+		System.out.println("Insert your name: ");
+		String name=sc.next();
+		empm.setName(name);
+		System.out.println("Your name: " +empm.getName());
+		
+		System.out.println("Insert your dept: ");
+		String dept=sc.next();
+		empm.setDept(dept);
+		System.out.println("Your dept: " +empm.getDept());
+		
+		System.out.println("Insert your address: ");
+		String address=sc.next();
+		empm.setAddress(address);
+		System.out.println("Your address: " +empm.getAddress());
+		
+		System.out.println("Insert your salery: ");
+		int salery=sc.nextInt();
+		empm.setSalery(salery);
+		System.out.println("Your salery: " +empm.getSalery());
+		
+		System.out.println("Insert your email: ");
+		String email=sc.next();
+		empm.setEmail(email);
+		System.out.println("Your email: " +empm.getEmail());
+		
+		String sql="update employee set name=?,dept=?,address=?,salery=?,email=? where empid=?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(6, id);
+		ps.setString(1, name);
+		ps.setString(2, dept);
+		ps.setString(3, address);
+		ps.setInt(4, salery);
+		ps.setString(5, email);
+		
+		ps.executeUpdate();
+		ps.close();
+		con.close();
+		}
+	}
+
+	@Override
+	public void DeleteParData() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		while(true) {
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", "root", "root");
+		
+		System.out.println("Insert id which data you want to ramove");
+		int id=sc.nextInt();
+		String sql="delete from employee where empid=?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, id);
+		ps.executeUpdate();
+		System.out.println("Data Delete");
+		ps.close();
+		con.close();
+		}
+	}
+
+	@Override
+	public void DeleteAll() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+         Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", "root", "root");
+		
+		    
+		     String sql="truncate table employee";
+		    Statement statement = con.createStatement();
+		    statement.execute(sql);
+		     System.out.println("Delete All Data");
+		     statement.close();
+		     con.close();
+		     
+		     }
+		}
+		
+	
+
+
